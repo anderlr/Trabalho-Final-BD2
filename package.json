@@ -1,0 +1,16 @@
+{
+  "name": "trabalho_pratico_bd2",
+  "version": "1.0.0",
+  "description": "Trabalho final para a materia de Banco de Dados II",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./src/index.js"
+  },
+  "author": "Anderson ,Ikaro, Lucas Marcelo ,Luiz Eduardo e Vinicius Rezende",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.14"
+  }
+}
