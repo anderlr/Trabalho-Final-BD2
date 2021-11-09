@@ -1,6 +1,6 @@
 # Modelo Conceitual (Modelo Entidade Relacionamento - DER)
 <div align="center">
-<img src="https://user-images.githubusercontent.com/53983792/130801025-4d846916-1508-47f2-972d-275203da3cc4.png" />
+<img src="https://user-images.githubusercontent.com/53983792/140938112-986ade48-cf06-49b8-bf8b-0736c4a91764.png" />
 </div>
 
 # Modelo Lógico (Modelo Relacional)
