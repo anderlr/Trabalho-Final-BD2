@@ -1,14 +1,31 @@
 const express = require("express");
+const { Sequelize } = require('sequelize');
+
 const app = express();
 app.use(express.json());
 
-var rockets = require('./rockets');
+var insertData = require('./routes/insertData');
 app.listen(5000, () => {
     console.log("Inicializado");
     console.log(`Servidor rodando localmente em: http://localhost:5000`);
 });
 
-app.use('/rockets', rockets); //rotas para obter foguete
+app.use('/insertData', insertData); //rotas para obter foguete
+
+const sequelize = new Sequelize('postgres://postgres:root@localhost:5432/spacex') // Example for postgres
+
+sequelize.authenticate().then(() => {
+    console.log('Conexão com banco estabelecida com sucesso!');
+});
+
+
+
+
+
+
+
+
+
 
 
 
