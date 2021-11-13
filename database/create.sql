@@ -1,5 +1,5 @@
 CREATE TABLE rockets (
-    id serial PRIMARY KEY,
+    id varchar(100) PRIMARY KEY,
     name varchar(100),
     height real,
     mass real,
@@ -8,7 +8,7 @@ CREATE TABLE rockets (
 );
 
 CREATE TABLE launchpads (
-    id serial PRIMARY KEY,
+    id varchar(100) PRIMARY KEY,
     name varchar(100),
     locality varchar(100),
     region varchar(100),
@@ -17,7 +17,7 @@ CREATE TABLE launchpads (
 );
 
 CREATE TABLE launches(
-    id serial PRIMARY KEY,
+    id varchar(100) PRIMARY KEY,
     flight_number integer NOT NULL,
     name varchar(100) UNIQUE NOT NULL,
     date date NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE launches(
 );
 
 CREATE TABLE images (
-    id serial PRIMARY KEY,
+    id varchar(100) PRIMARY KEY,
     link text UNIQUE NOT NULL,
     id_rocket integer REFERENCES rockets(id),
     id_launchpad integer REFERENCES launchpads(id)
