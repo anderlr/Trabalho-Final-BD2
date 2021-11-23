@@ -1,5 +1,5 @@
 # Trabalho Final de Banco de Dados 2
-O projeto consiste em uma API que busca os dados da SpaceX-API e
+O projeto consiste em uma API que busca os dados da Riot Games API e
 trata os mesmo pra depois inserir em um banco de dados PostgreSQL
 
 ## Equipe
@@ -16,14 +16,14 @@ trata os mesmo pra depois inserir em um banco de dados PostgreSQL
 
 
 ## Api utilizada
-https://github.com/r-spacex/SpaceX-API/tree/master/docs#rspacex-api-docs
+https://developer.riotgames.com/apis
 
 
 ## Rotas Implementadas para esse projeto
 urlBase = http://localhost:5000
 
-- {urlBase}/rockets 
-    - Retorna um dos foguetes encontrados na API
+- {urlBase}/insertData 
+
 
 ## Collection de exemplos para o projeto
-https://www.getpostman.com/collections/c323461e1ee5646cc6f3
+-Criar nova
