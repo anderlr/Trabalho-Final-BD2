@@ -1,34 +1,28 @@
-CREATE TABLE rockets (
-    id varchar(100) PRIMARY KEY,
-    name varchar(100),
-    height real,
-    mass real,
-    stages integer,
-    first_flight date
+CREATE TABLE summoner (
+    puuid varchar(78) PRIMARY KEY,
+    profileIconid integer NOT NULL,
+    summonerLevel integer NOT NULL
 );
 
-CREATE TABLE launchpads (
-    id varchar(100) PRIMARY KEY,
-    name varchar(100),
-    locality varchar(100),
-    region varchar(100),
-    latitude real NOT NULL,
-    longitude real NOT NULL
+
+CREATE TABLE match (
+    matchid varchar(100) PRIMARY KEY,
+    gameMode varchar(100) NOT NULL,
+    gameDuration integer NOT NULL,
+    gameName varchar(100) NOT NULL,
+    queueId integer NOT NULL,
+    total_kills integer NOT NULL
 );
 
-CREATE TABLE launches(
-    id varchar(100) PRIMARY KEY,
-    flight_number integer NOT NULL,
-    name varchar(100) UNIQUE NOT NULL,
-    date date NOT NULL,
-    success BOOLEAN NOT NULL,
-    id_rocket integer REFERENCES rockets(id) NOT NULL,
-    id_launchpad integer REFERENCES launchpads(id) NOT NULL
-);
-
-CREATE TABLE images (
-    id varchar(100) PRIMARY KEY,
-    link text UNIQUE NOT NULL,
-    id_rocket integer REFERENCES rockets(id),
-    id_launchpad integer REFERENCES launchpads(id)
-);
+CREATE TABLE match_summ_details(
+    summ_puuid varchar(78) REFERENCES summoner(puuid),
+    matchid varchar(100) REFERENCES match(matchid),
+    kills integer NOT NULL,
+    deaths integer NOT NULL,
+    assists integer NOT NULL,
+    championName varchar(100) NOT NULL,
+    lane varchar(100) NOT NULL,
+    goldEarned integer NOT NULL,
+    win boolean NOT NULL,
+    PRIMARY KEY(summ_puuid, matchid)
+)
