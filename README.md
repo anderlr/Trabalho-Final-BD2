@@ -1,6 +1,6 @@
 # Trabalho Final de Banco de Dados 2
-O projeto consiste em uma API que busca os dados da Riot Games API e
-trata os mesmo pra depois inserir em um banco de dados PostgreSQL
+O projeto consiste em uma API que busca os dados do jogo League of Legends
+da Riot Games API e trata os mesmo pra depois inserir em um banco de dados PostgreSQL
 
 ## Equipe
 - Anderson Leandro - 2018019033
@@ -19,10 +19,14 @@ trata os mesmo pra depois inserir em um banco de dados PostgreSQL
 https://developer.riotgames.com/apis
 
 
+/lol/summoner/v4/summoners/by-name/{summonerName}
+
+/lol/match/v5/matches/{matchId}
+
 ## Rotas Implementadas para esse projeto
 urlBase = http://localhost:5000
 
-- {urlBase}/insertData 
+- {urlBase}/insertData
 
 
 ## Collection de exemplos para o projeto
