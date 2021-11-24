@@ -4,7 +4,7 @@ const axios = require('axios');
 const Rockets = require('../models/summoner');
 const Launches = require('../models/match');
 
-const api_key = "RGAPI-4911e800-c09b-4b4d-8043-ccce4a8105b9"
+const api_key = ""
 const username = "edwardbunker"
 const puuid = "_7d_-Qcfk2HF0Ad6ZEZ5XyTdSU_wpdombMr_kCgZJL-DNnYqRcEMduMSlXJ0pJDV7BI1v-Ix8SKYOw"
 // const config = {
