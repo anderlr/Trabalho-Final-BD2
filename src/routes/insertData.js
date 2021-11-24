@@ -1,84 +1,90 @@
 var express = require('express');
 var router = express.Router();
 const axios = require('axios');
-const Rockets = require('../models/summoner');
-const Launches = require('../models/match');
+const Match = require('../models/match');
+const Summoner = require('../models/summoner');
+const Match_summ_details = require('../models/match_summ_details');
 
-const api_key = ""
+require('dotenv').config()
+
 const username = "edwardbunker"
 const puuid = "_7d_-Qcfk2HF0Ad6ZEZ5XyTdSU_wpdombMr_kCgZJL-DNnYqRcEMduMSlXJ0pJDV7BI1v-Ix8SKYOw"
-// const config = {
-//     headers: {
-//         "Content-Type": "application/json",
-//     },
-// };
-
-// axios.defaults.headers.common = {
-//     authorization: "RGAPI-4911e800-c09b-4b4d-8043-ccce4a8105b9"
-// };
 
 
+const getOneSummoner = async () => {
 
-const getSummoners = async () => {
-    const filteredDataSummoners = []
-
-    const { data: summoners } = await axios({
+    const { data: summoner } = await axios({
         method: "get",
-        url: `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}?api_key=${api_key}`
+        url: `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}?api_key=${process.env.API_KEY}`
     });
-    console.log(summoners)
 
-
-    // summoners.forEach(
-    //     (summoner) => {
-    //         filteredDataRockets.push({
-    //             id: rocket.id,
-    //             name: rocket.name,
-    //             height: rocket.height.meters,
-    //             mass: rocket.mass.kg,
-    //             stages: rocket.stages,
-    //             first_flight: rocket.first_flight
-    //         })
-    //     }
-
-    // )
-
-    return filteredDataSummoners
+    const filteredSummoner =
+    {
+        puuid: summoner.puuid,
+        profileIconid: summoner.profileIconId,
+        summonerLevel: summoner.summonerLevel
+    }
+    return filteredSummoner
 }
 
-const getMatches = async () => {
-    const filteredDataMatches = []
-
+const getMatches = async (quantidade) => {
     const { data: matches } = await axios({
         method: "get",
-        url: `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${api_key}`
+        url: `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${quantidade}&api_key=${process.env.API_KEY}`
     });
-    console.log(matches)
-
-
-    // const { data: launchpads } = await axios.get(`https://api.spacexdata.com/v4/launchpads`)
-    // launchpads.forEach(
-    //     (launchpad) => {
-    //         filteredDataLaunchpads.push({
-    //             id: launchpad.id,
-    //             name: launchpad.name,
-    //             locality: launchpad.locality,
-    //             region: launchpad.region,
-    //             latitude: launchpad.latitude,
-    //             longitude: launchpad.longitude
-    //         })
-    //     }
-
-    // )
-    return filteredDataMatches
+    return matches
 }
 
+const getMatchDetails = async (matchid) => {
+    const filteredMatchDetails = []
+    let totalKillCounter = 0
+
+    const { data: match_details } = await axios({
+        method: "get",
+        url: `https://americas.api.riotgames.com/lol/match/v5/matches/${matchid}?api_key=${process.env.API_KEY}`
+    });
+    //console.log(match_details.info.participants[0].puuid)
+
+    const participants = match_details.info.participants
+
+    participants.forEach((player) => {
+        totalKillCounter += player.kills
+        filteredMatchDetails.push(
+            {
+                summ_puuid: player.puuid,
+                matchid: matchid,
+                kills: player.kills,
+                deaths: player.deaths,
+                assists: player.assists,
+                championName: player.championName,
+                lane: player.lane,
+                goldEarned: player.goldEarned,
+                win: player.win
+            }
+        )
+    }
+    )
+    const filteredMatch =
+    {
+        matchid: matchid,
+        gameMode: match_details.info.gameMode,
+        gameDuration: match_details.info.gameDuration,
+        gameName: match_details.info.gameName,
+        queueId: match_details.info.queueId,
+        total_kills: totalKillCounter
+    }
+
+    const filteredMatchData = { filteredMatchDetails, filteredMatch }
+    console.log(filteredMatchData)
+    return filteredMatchData
+}
 
 
 // Rota padrao
 router.get('/', async (req, res) => {
-    const summoners = await getSummoners() //busca os jogadores
-    const matches = await getMatches()//busca as partidas
+    const summoner = await getOneSummoner() //busca um jogador
+    const matches = await getMatches(20)//busca uma quantidade n de partidas do jogador
+    const match = await getMatchDetails(matches[0])
 
     // 1 - com o nick de alguem pega o puuid
     // 2 - com o puuid busca o id de uma partida

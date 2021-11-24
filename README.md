@@ -11,6 +11,7 @@ da Riot Games API e trata os mesmo pra depois inserir em um banco de dados Postg
 
 ## Como rodar o projeto
 1. Clone o projeto
+2. Mude o nomedo arquivo .envExample para .env e coloque nele sua chave de api
 2. Rode o comando `npm install` na pasta do projeto
 3. Rode o comando `npm start`
 
