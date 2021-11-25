@@ -11,11 +11,10 @@ const username = "edwardbunker"
 const puuid = "_7d_-Qcfk2HF0Ad6ZEZ5XyTdSU_wpdombMr_kCgZJL-DNnYqRcEMduMSlXJ0pJDV7BI1v-Ix8SKYOw"
 
 
-const getOneSummoner = async () => {
-
+const getSummonerNickname = async (nickname) => {
     const { data: summoner } = await axios({
         method: "get",
-        url: `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}?api_key=${process.env.API_KEY}`
+        url: `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${nickname}?api_key=${process.env.API_KEY}`
     });
 
     const filteredSummoner =
@@ -26,6 +25,22 @@ const getOneSummoner = async () => {
     }
     return filteredSummoner
 }
+
+const getSummonerPuuid = async (puuid) => {
+    const { data: summoner } = await axios({
+        method: "get",
+        url: `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${process.env.API_KEY}`
+    });
+
+    const filteredSummoner =
+    {
+        puuid: summoner.puuid,
+        profileIconid: summoner.profileIconId,
+        summonerLevel: summoner.summonerLevel
+    }
+    return filteredSummoner
+}
+
 
 const getMatches = async (quantidade) => {
     const { data: matches } = await axios({
@@ -46,9 +61,10 @@ const getMatchDetails = async (matchid) => {
     //console.log(match_details.info.participants[0].puuid)
 
     const participants = match_details.info.participants
-
+    const participantsList = []
     participants.forEach((player) => {
         totalKillCounter += player.kills
+        participantsList.push(player.puuid)
         filteredMatchDetails.push(
             {
                 summ_puuid: player.puuid,
@@ -74,38 +90,59 @@ const getMatchDetails = async (matchid) => {
         total_kills: totalKillCounter
     }
 
-    const filteredMatchData = { filteredMatchDetails, filteredMatch }
-    console.log(filteredMatchData)
+    const filteredMatchData = { filteredMatchDetails, filteredMatch, participantsList }
+
     return filteredMatchData
 }
 
 
+const insertDataToDatabase = async (summoners, match, match_details) => {
+    // match, match_details
+    summoners.forEach(async (summoner) => {
+        try {
+            await Summoner.create(summoner) //inserindo jogadores
+        } catch (error) {
+            console.error(error.errors);
+        }
+    })
+
+    try {
+        await Match.create(match) //inserindo partida
+    } catch (error) {
+        console.error(error.errors);
+    }
+    for (let i = 0; i < match_details.length; i += 1) {
+        try {
+            await Match_summ_details.create(match_details[i]) //inserindo detalhes
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+}
+
 // Rota padrao
 router.get('/', async (req, res) => {
-    const summoner = await getOneSummoner() //busca um jogador
-    const matches = await getMatches(20)//busca uma quantidade n de partidas do jogador
-    const match = await getMatchDetails(matches[0])
+    //========PRIMEIRA BUSCA========
+    const first_summoner = await getSummonerNickname("edwardbunker") //busca um jogador baseado no seu nickname
+    const matches = await getMatches(50)//busca uma quantidade n de partidas do jogador
+    //const summoner_list = getNextSummoners() //busca uma lista de jogadores baseado na primeira partida
+    console.log(matches)
+    const matchData = await getMatchDetails(matches[0]) //partida, detalhes e lista de jogadores
+    //========PRIMEIRA BUSCA========
 
-    // 1 - com o nick de alguem pega o puuid
-    // 2 - com o puuid busca o id de uma partida
-    // 3 - com o id da partida busca essa partida
-    // 4 - insere partida
-    // 5 - pra cada usuario, insere ele e o tupla na tabela match_summ_details
+    const insertSummonerList = []
 
-    // const launches = await getLaunches()
+    for (let i = 0; i < matchData.participantsList.length; i += 1) {
+        try {
+            let next_summoner = await getSummonerPuuid(matchData.participantsList[i]) //manda o puuid de cada jogador para ser inserido
+            insertSummonerList.push(next_summoner)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-    //console.log("rockets data:", rockets.length)
-    //console.log(launches)
-    //console.log(rockets)
-    //console.log(launchpads)
-
-    // rockets.forEach((rkt) => {
-    //     Rockets.create(rkt);
-    // })
-
-    // launches.forEach((lnc) => {
-    //     Launches.create(lnc);
-    // })
+    insertDataToDatabase(insertSummonerList, matchData.filteredMatch, matchData.filteredMatchDetails)//insere os dados enviados no banco
 
     // res.status(200).send(launchpads)
 
