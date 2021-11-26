@@ -156,7 +156,7 @@ router.get('/', async (req, res) => {
         console.log("Nome do Jogador:", nickname_list[k])
         //========PRIMEIRA BUSCA========
         const first_summoner = await getSummonerNickname(nickname_list[k]) //busca um jogador baseado no seu nickname
-        const matches = await getMatches(first_summoner.puuid, 20)//busca uma quantidade n de partidas do jogador
+        const matches = await getMatches(first_summoner.puuid, 23)//busca uma quantidade n de partidas do jogador
         //const summoner_list = getNextSummoners() //busca uma lista de jogadores baseado na primeira partida
         const matchData = await getMatchDetails(matches[0]) //partida, detalhes e lista de jogadores
         //========PRIMEIRA BUSCA========
