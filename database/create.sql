@@ -1,4 +1,5 @@
 CREATE TABLE summoner (
+    name varchar(30) UNIQUE NOT NULL,
     puuid varchar(78) PRIMARY KEY,
     profileIconid integer NOT NULL,
     summonerLevel integer NOT NULL

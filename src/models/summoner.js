@@ -3,6 +3,11 @@ const { DataTypes } = require('sequelize')
 const connection = require("../database")
 
 const Summoner = connection.define("summoner", {
+    name:
+    {
+        type: DataTypes.STRING(78),
+        unique: true
+    },
     puuid:
     {
         type: DataTypes.STRING(78),

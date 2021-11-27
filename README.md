@@ -14,21 +14,17 @@ da Riot Games API e trata os mesmo pra depois inserir em um banco de dados Postg
 2. Mude o nomedo arquivo .envExample para .env e coloque nele sua chave de api
 2. Rode o comando `npm install` na pasta do projeto
 3. Rode o comando `npm start`
+4. Restaure no postgresql o banco "loldatabase.backup"
+
+OBS: caso vá utilizar a API para popular você deve colocar o nome do banco como : "loldatabase",
+ou ao menos bater com o nome no database.js. Mas para fins de teste o nome não precisa ser igual.
 
 
 ## Api utilizada
 https://developer.riotgames.com/apis
-
-
-/lol/summoner/v4/summoners/by-name/{summonerName}
-
-/lol/match/v5/matches/{matchId}
-
+-summoners(nickname/puuid)
+-matches
 ## Rotas Implementadas para esse projeto
 urlBase = http://localhost:5000
 
 - {urlBase}/insertData
-
-
-## Collection de exemplos para o projeto
--Criar nova

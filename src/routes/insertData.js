@@ -22,6 +22,7 @@ const getSummonerNickname = async (nickname) => {
 
     const filteredSummoner =
     {
+        name: summoner.name,
         puuid: summoner.puuid,
         profileIconid: summoner.profileIconId,
         summonerLevel: summoner.summonerLevel
@@ -37,6 +38,7 @@ const getSummonerPuuid = async (puuid) => {
 
     const filteredSummoner =
     {
+        name: summoner.name,
         puuid: summoner.puuid,
         profileIconid: summoner.profileIconId,
         summonerLevel: summoner.summonerLevel
@@ -141,7 +143,7 @@ const insertDataToDatabase = async (summoners, match, match_details) => {
                 console.log(`OK Detalhes inseridos, Ah éeee! OK`)
             }
             else {
-                console.log(`X Detalhes inseridos já inseridos: F! X`)
+                console.log(`X Detalhes já inseridos: F! X`)
             }
         } catch (error) {
             console.error(error);
@@ -156,12 +158,12 @@ router.get('/', async (req, res) => {
         console.log("Nome do Jogador:", nickname_list[k])
         //========PRIMEIRA BUSCA========
         const first_summoner = await getSummonerNickname(nickname_list[k]) //busca um jogador baseado no seu nickname
-        const matches = await getMatches(first_summoner.puuid, 23)//busca uma quantidade n de partidas do jogador
+        const matches = await getMatches(first_summoner.puuid, 20)//busca uma quantidade n de partidas do jogador
         //const summoner_list = getNextSummoners() //busca uma lista de jogadores baseado na primeira partida
         const matchData = await getMatchDetails(matches[0]) //partida, detalhes e lista de jogadores
         //========PRIMEIRA BUSCA========
 
-        //========PROXIMAS BUSCAS========
+        // //========PROXIMAS BUSCAS========
         const insertSummonerList = []
 
         for (let i = 0; i < matchData.participantsList.length; i += 1) {
