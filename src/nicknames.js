@@ -1,37 +1,39 @@
 
-const nickname_list =
-    [
-        'Kinky Freak',
-        'FLECHA DO PBO',
-        'monstertruck',
-        'Poroca',
-        'GCE Tyrael',
-        'IChessusi',
-        'O Homem Borracha',
-        'FlanguinhO',
-        'Ze do furduncio',
-        'Daisy Bloom',
-        'Farias AO',
-        'Hautt',
-        'FairyOnly',
-        'Field CONTROL',
-        'Kadima',
-        'NeroIV',
-        'Dogenator',
-        'Araqueneedyou',
-        'Rivis Bot',
-        'Kanjiro',
-        'Kayro',
-        'LUKITT%C3%83O',
-        'mouraakamoura',
-        'Octavia Blake',
-        'pompom purin',
-        'rafika2000',
-        'Sunseater6',
-        'Viajem as nuvens',
-        'Black Mage',//19
-        'TexugoaDiesel' //15
-    ]
+// const nickname_list =
+//     [
+//         'Kinky Freak',
+//         'FLECHA DO PBO',
+//         'monstertruck',
+//         'Poroca',
+//         'GCE Tyrael',
+//         'IChessusi',
+//         'O Homem Borracha',
+//         'FlanguinhO',
+//         'Ze do furduncio',
+//         'Daisy Bloom',
+//         'Farias AO',
+//         'Hautt',
+//         'FairyOnly',
+//         'Field CONTROL',
+//         'Kadima',
+//         'NeroIV',
+//         'Dogenator',
+//         'Araqueneedyou',
+//         'Rivis Bot',
+//         'Kanjiro',
+//         'Kayro',
+//         'LUKITT%C3%83O',
+//         'mouraakamoura',
+//         'Octavia Blake',
+//         'pompom purin',
+//         'rafika2000',
+//         'Sunseater6',
+//         'Viajem as nuvens',
+//         'Black Mage',//19
+//         'TexugoaDiesel' //15
+//     ]
+
+const nickname_list = ['Kinky Freak']
 module.exports = nickname_list
 
 
