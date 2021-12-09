@@ -3,12 +3,14 @@ const express = require("express");
 const app = express();
 
 var insertData = require('./routes/insertData');
+var getSummoner = require('./routes/getSummoner');
 app.listen(5000, () => {
     console.log("Inicializado");
     console.log(`Servidor rodando localmente em: http://localhost:5000`);
 });
 
 app.use('/insertData', insertData);
+app.use('/summoner', getSummoner);
 
 
 app.use(express.json());

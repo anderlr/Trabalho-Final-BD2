@@ -202,9 +202,5 @@ router.get('/', async (req, res) => {
 
     res.sendStatus(200)
 });
-// define the about route
-router.get('/about', function (req, res) {
-    res.send('About Rockets!');
-});
 
 module.exports = router;

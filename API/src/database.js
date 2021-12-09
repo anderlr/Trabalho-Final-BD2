@@ -1,9 +1,10 @@
 
 const { Sequelize } = require('sequelize');
 //const sequelize = new Sequelize('postgres://postgres:root@localhost:5432/spacex')
-const sequelize = new Sequelize('loldatabase_exemplo', 'postgres', 'root', {
+const sequelize = new Sequelize('loldatabase', 'postgres', 'root', {
     host: 'localhost',
-    dialect: 'postgres'
+    dialect: 'postgres',
+    logging: false
 });
 
 sequelize.authenticate().then(() => {
