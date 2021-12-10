@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useRef } from 'react';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -14,20 +14,33 @@ import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel'
 import Api from "../services/api";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import ReactToPrint from 'react-to-print';
 
 export default function Content() {
 
     const [Table, setTable] = React.useState('');
-
     const [Atributes, setAtributes] = React.useState('');
     const [checked, setChecked] = React.useState(
         {
-            Name: true,
-            ProfileIconId: false,
-            SummonerLevel: false,
+            name: true,
+            profileIconid: false,
+            summonerLevel: false,
         });
+
     const [SummonerName, setName] = React.useState('');
-    const [RetornoAPI, setResult] = React.useState('');
+    const [rows, setResult] = React.useState(
+        {
+            name: '',
+            summonerLevel: 0,
+            profileIconid: 0
+        }
+    );
 
     const handleChangeTable = (event) => {
         setTable(event.target.value);
@@ -42,27 +55,27 @@ export default function Content() {
             ...checked,
             [event.target.name]: event.target.checked,
         });
-        console.log(checked.Name)
+        console.log(checked.name)
     };
 
     const handleName = (event) => {
         setName(event.target.value);
     };
 
-
-
     const handleSubmit = async () => {
         const api = new Api();
         checked.SummonerName = SummonerName
-        const resultado = await api.getSummoner(checked)
-
-        console.log(resultado.data)
-        setResult(resultado.data.summonerLevel);
-
-
+        const resultado = await api.getSummoner(JSON.stringify(checked))
+        console.log(resultado)
+        setResult(prevState => ({
+            ...prevState,
+            name: resultado.data.name,
+            summonerLevel: resultado.data.summonerLevel,
+            profileIconid: resultado.data.profileIconid
+        }))
     }
 
-    const { Name, ProfileIconId, SummonerLevel } = checked;
+    const { name, profileIconid, summonerLevel } = checked;
 
 
     const chooseTableCollumns = (table) => {
@@ -76,26 +89,25 @@ export default function Content() {
                         <FormGroup>
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={Name} onChange={handleChange} name="Name" />
+                                    <Checkbox checked={name} onChange={handleChange} name="name" />
                                 }
-                                label="Name"
+                                label="name"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={ProfileIconId} onChange={handleChange} name="ProfileIconId" />
+                                    <Checkbox checked={profileIconid} onChange={handleChange} name="profileIconid" />
                                 }
                                 label="Profile Icon Id"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={SummonerLevel} onChange={handleChange} name="SummonerLevel" />
+                                    <Checkbox checked={summonerLevel} onChange={handleChange} name="summonerLevel" />
                                 }
                                 label="Summoner Level"
                             />
                         </FormGroup>
                         <Button variant="contained" onClick={handleSubmit}>Buscar Invocador!</Button>
                     </FormControl>
-                    <h2>Resultado:{RetornoAPI}</h2>
                 </Grid>
 
             );
@@ -112,7 +124,7 @@ export default function Content() {
     }
 
     return (
-        <Paper>
+        <Paper >
             <Grid textAlign='center'>
                 <Grid container spacing={1} padding={1}>
                     <Grid item xs={6}>
@@ -136,12 +148,11 @@ export default function Content() {
                     <Grid item xs={6} >
                         <Grid>
                             <h2>Resultados</h2>
-                            <Chart></Chart>
+                            {resultTable([rows])}
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-
         </Paper >
 
 
@@ -150,57 +161,45 @@ export default function Content() {
     );
 }
 
-// import * as React from 'react';
-// import Box from '@mui/material/Box';
-// import FormLabel from '@mui/material/FormLabel';
-// import FormControl from '@mui/material/FormControl';
-// import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import Checkbox from '@mui/material/Checkbox';
+const resultTable = (rows) => {
+    console.log("rows", rows)
+    const inputEl = useRef(null);
+    return (
+        <Grid>
+            <Grid my={5} ref={inputEl}>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="center">name</TableCell>
+                                <TableCell align="center">Summoner Level</TableCell>
+                                <TableCell align="center">Profile Icon Id</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row) => (
+                                <TableRow
+                                    key={row.name}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell align="center">{row.name}</TableCell>
+                                    <TableCell align="center">{row.summonerLevel}</TableCell>
+                                    <TableCell align="center">{row.profileIconid}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Grid my={5}>
+                    <Chart></Chart>
+                </Grid>
+            </Grid>
 
-// export default function CheckboxesGroup() {
-//     const [state, setState] = React.useState({
-//         Name: true,
-//         ProfileIconId: false,
-//         SummonerLevel: false,
-//     });
 
-//     const handleChange = (event) => {
-//         setState({
-//             ...state,
-//             [event.target.name]: event.target.checked,
-//         });
-//     };
-
-//     const { Name, ProfileIconId, SummonerLevel } = state;
-
-//     return (
-//         <Box sx={{ display: 'flex' }}>
-//             <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-//                 <FormLabel component="legend">Assign responsibility</FormLabel>
-//                 <FormGroup>
-//                     <FormControlLabel
-//                         control={
-//                             <Checkbox checked={Name} onChange={handleChange} name="Name" />
-//                         }
-//                         label="Name"
-//                     />
-//                     <FormControlLabel
-//                         control={
-//                             <Checkbox checked={ProfileIconId} onChange={handleChange} name="ProfileIconId" />
-//                         }
-//                         label="Profile Icon Id"
-//                     />
-//                     <FormControlLabel
-//                         control={
-//                             <Checkbox checked={SummonerLevel} onChange={handleChange} name="SummonerLevel" />
-//                         }
-//                         label="Summoner Level"
-//                     />
-//                 </FormGroup>
-//                 <FormHelperText>Be careful</FormHelperText>
-//             </FormControl>
-//         </Box>
-//     );
-// }
+            <ReactToPrint
+                trigger={() => <Button variant="contained">Exportar em PDF</Button>}
+                content={() => inputEl.current}
+            />
+        </Grid >
+    );
+}
