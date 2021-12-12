@@ -48,7 +48,16 @@ router.get('/', async (req, res) => {
             nameList.forEach((item, index) => {
                 search[index].dataValues.name = item
             })
-            res.send(search)
+            var goldTotal = 0
+            search.forEach((data) => {
+                goldTotal += data.dataValues.goldEarned
+            })
+
+            search.forEach((data, index) => {
+                search[index].dataValues["goldEarned(%)"] = (data.dataValues.goldEarned / goldTotal) * 100
+                delete search[index].dataValues.goldEarned
+            })
+            res.send(JSON.stringify(search))
 
         } catch (error) {
             console.error(error);

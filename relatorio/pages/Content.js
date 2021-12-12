@@ -321,7 +321,7 @@ export default function Content() {
         }
         if (table == "Graficos por partida") {
             return (
-                <Grid sx={12}>
+                <Grid sx={6}>
                     <Grid my={2} sx={12}><TextField onChange={handleMatchId} id="outlined-basic" label="Matchid da partida" variant="outlined" /></Grid>
                     <FormControl sx={12} component="fieldset2" variant="standard">
                         <FormLabel component="legend">Colunas Selecionadas</FormLabel>
@@ -414,6 +414,7 @@ export default function Content() {
 const resultTable = (rows, table) => {
     const inputEl = useRef(null);
 
+
     if (table == "Partidas por jogador") {
         const tableCollumns = ['matchid', 'kills', 'deaths', 'assists', 'championName', 'lane', 'goldEarned', 'win']
         return (
@@ -454,34 +455,65 @@ const resultTable = (rows, table) => {
     }
     if (table == "Graficos por partida") {
         //const data = [{ match: 1, kills: 20 }, { match: 2, kills: 7 }, { match: 3, kills: 12 }, { match: 4, kills: 15 }];
-        //const tableCollumns = ['kills', 'deaths', 'assists', 'goldEarned']
+
         if (rows[0][0] != undefined) {
+            const tableCollumns = ['name', 'kills', 'deaths', 'assists', 'goldEarned(%)']
             return (
-                <Grid sx={12} ref={inputEl}>
-                    <ResponsiveContainer width="100%" aspect={3}>
-                        <BarChart
-                            width={500}
-                            height={300}
-                            data={rows[0]}
-                            margin={{
-                                top: 20,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="kills" fill="#8884d8" />
-                            <Bar dataKey="deaths" fill="#ba2727" />
-                            <Bar dataKey="assists" fill="#2f801f" />
-                            <Bar dataKey="goldEarned" fill="#ffc658" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </Grid >
+                <Grid sx={12}>
+                    <Grid sx={6}>
+                        <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                                <TableHead>
+                                    <TableRow>
+                                        {tableCollumns.map((item) => (
+                                            <TableCell align="center">{item}</TableCell>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        rows[0].map((row) => (
+                                            <TableRow
+                                                key={row.name}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                {tableCollumns.map((key2) => (
+                                                    <TableCell align="center">{row[`${key2}`]}</TableCell>
+                                                ))}
+
+                                            </TableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                    <Grid sx={12} ref={inputEl}>
+                        <ResponsiveContainer width="100%" aspect={3}>
+                            <BarChart
+                                width={500}
+                                height={300}
+                                data={rows[0]}
+                                margin={{
+                                    top: 20,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="kills" fill="#2f801f" />
+                                <Bar dataKey="deaths" fill="#ba2727" />
+                                <Bar dataKey="assists" fill="#8884d8" />
+                                <Bar dataKey="goldEarned(%)" fill="#ffc658" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Grid >
+                </Grid>
             );
         }
 
@@ -543,7 +575,7 @@ const resultTableFinal = (rowsMatches, rowSummoners, rowsMatchChart) => {
                     {resultTable(rowsMatches, "Partidas por jogador")}
                 </Grid>
                 <Grid px={1} textAlign={'center'}>
-                    <h2>Grafico da Partida</h2>
+                    <h2>Detalhes da Partida</h2>
                     <Divider />
                     {resultTable(rowsMatchChart, "Graficos por partida")}
                 </Grid>

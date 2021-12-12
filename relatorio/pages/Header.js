@@ -36,23 +36,6 @@ function Header(props) {
                             </IconButton>
                         </Grid>
                         <Grid item xs />
-                        {/* <Grid item>
-                            <Link
-                                href="/"
-                                variant="body2"
-                                sx={{
-                                    textDecoration: 'none',
-                                    color: lightColor,
-                                    '&:hover': {
-                                        color: 'common.white',
-                                    },
-                                }}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                            >
-                                Go to docs
-                            </Link>
-                        </Grid> */}
                         <Grid item>
                             <Tooltip title="Alerts • No alerts">
                                 <IconButton color="inherit">
@@ -62,7 +45,7 @@ function Header(props) {
                         </Grid>
                         <Grid item>
                             <IconButton color="inherit" sx={{ p: 0.5 }}>
-                                <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+                                <Avatar alt="Travis Howard" src="avatar.jpg" />
                             </IconButton>
                         </Grid>
                     </Grid>
@@ -82,32 +65,12 @@ function Header(props) {
                                 Relatorio
                             </Typography>
                         </Grid>
-                        {/* <Grid item>
-                            <Button
-                                sx={{ borderColor: lightColor }}
-                                variant="outlined"
-                                color="inherit"
-                                size="small"
-                            >
-                                Web setup
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title="Help">
-                                <IconButton color="inherit">
-                                    <HelpIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid> */}
+
                     </Grid>
                 </Toolbar>
             </AppBar>
             <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 0 }}>
                 <Tabs value={0} textColor="inherit">
-                    {/* <Tab label="Users" />
-                    <Tab label="Sign-in method" />
-                    <Tab label="Templates" />
-                    <Tab label="Usage" /> */}
                 </Tabs>
             </AppBar>
         </React.Fragment>
