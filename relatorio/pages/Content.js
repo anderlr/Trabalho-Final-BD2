@@ -9,7 +9,6 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
-import Chart from './Chart'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel'
@@ -22,9 +21,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import ReactToPrint from 'react-to-print';
 import Divider from '@mui/material/Divider';
-import Switch from '@mui/material/Switch';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function Content() {
+
 
     const [Table, setTable] = React.useState('Usuários por nome');
     const [TableList, saveTable] = React.useState([]);
@@ -56,15 +56,12 @@ export default function Content() {
         });
 
 
-
-
-
-
     const [SummonerName, setName] = React.useState('');
     const [MatchId, setMatchId] = React.useState('');
     const [SummonerNumber, setNumber] = React.useState('');
     const [rowSummoners, setResult] = React.useState([]);
     const [rowsMatches, setResultMatch] = React.useState([]);
+    const [rowsMatchChart, setResultMatchChart] = React.useState([])
 
     const handleChangeTable = (event) => {
         setTable(event.target.value);
@@ -82,6 +79,7 @@ export default function Content() {
             ...checkedMatches,
             [event.target.name]: event.target.checked,
         });
+
     };
 
     const handleChangeMatchChart = (event) => {
@@ -89,6 +87,7 @@ export default function Content() {
             ...CheckedMatchChart,
             [event.target.name]: event.target.checked,
         });
+
     };
 
 
@@ -170,30 +169,17 @@ export default function Content() {
         const api = new Api();
         CheckedMatchChart.matchid = MatchId
         try {
-
             const resultado = await api.getMatchChart(JSON.stringify(CheckedMatchChart))
-            // resultado.data.map((summ) => {
-            //     insert = true
-            //     rowSummoners.map((row) => {
-            //         if (row.createdAt == summ.createdAt) {
-            //             insert = false
-            //         }
-            //     })
-            //     if (insert) {
-            //         setResult(state => [...state,
-            //             summ
-            //         ])
-            //     }
-            // });
-            console.log(resultado)
-
+            resultado.data.map((item) => {
+                setResultMatchChart(state => [...state,
+                    item
+                ])
+            });
         } catch (error) {
             if (error == 'Error: Request failed with status code 400') alert("Erro: Nenhuma coluna selecionada!")
         }
 
     }
-
-
 
     const { name, profileIconid, summonerLevel } = checkedSummoner;
     const { matchid, kills, deaths, assists, championName, lane, goldEarned, win } = checkedMatches;
@@ -337,7 +323,7 @@ export default function Content() {
             return (
                 <Grid sx={12}>
                     <Grid my={2} sx={12}><TextField onChange={handleMatchId} id="outlined-basic" label="Matchid da partida" variant="outlined" /></Grid>
-                    <FormControl sx={12} component="fieldset" variant="standard">
+                    <FormControl sx={12} component="fieldset2" variant="standard">
                         <FormLabel component="legend">Colunas Selecionadas</FormLabel>
                         <FormGroup>
                             <Grid sx={12} textAlign='left'>
@@ -381,7 +367,7 @@ export default function Content() {
         <Paper sx={12}>
             <Grid textAlign='center'>
                 <Grid container spacing={1} padding={1}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <Grid container padding={1} xs={12}>
                             <h2>Selecionar Parametros</h2>
                             <FormControl fullWidth>
@@ -400,14 +386,17 @@ export default function Content() {
                         </Grid>
                         {chooseTableCollumns(Table)}
                     </Grid>
-                    <Grid item xs={6} >
+                    <Grid item xs={12} >
                         <Grid>
                             <h2>Consulta Atual</h2>
 
                             {Table == "Partidas por jogador" &&
                                 resultTable([rowsMatches], Table)
                             }
-                            {Table != "Partidas por jogador" &&
+                            {Table == "Graficos por partida" &&
+                                resultTable([rowsMatchChart], Table)
+                            }
+                            {Table != "Partidas por jogador" && Table != "Graficos por partida" &&
                                 resultTable([rowSummoners], Table)
                             }
                         </Grid>
@@ -416,7 +405,7 @@ export default function Content() {
                 <Divider />
             </Grid>
             <Grid sx={12} textAlign='center'>
-                {resultTableFinal([rowsMatches], [rowSummoners])}
+                {resultTableFinal([rowsMatches], [rowSummoners], [rowsMatchChart])}
             </Grid>
         </Paper >
     );
@@ -464,44 +453,38 @@ const resultTable = (rows, table) => {
         );
     }
     if (table == "Graficos por partida") {
-        const tableCollumns = ['kills', 'deaths', 'assists', 'goldEarned']
-        return (
-            <Grid>
-                <Grid my={5} ref={inputEl}>
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                            <TableHead>
-                                <TableRow>
-                                    {tableCollumns.map((item) => (
-                                        <TableCell align="center">{item}</TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows[0].map((row) => (
-                                    <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="center">{row.matchid}</TableCell>
-                                        <TableCell align="center">{row.kills}</TableCell>
-                                        <TableCell align="center">{row.deaths}</TableCell>
-                                        <TableCell align="center">{row.assists}</TableCell>
-                                        <TableCell align="center">{row.championName}</TableCell>
-                                        <TableCell align="center">{row.lane}</TableCell>
-                                        <TableCell align="center">{row.goldEarned}</TableCell>
-                                        <TableCell align="center">{row.win}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <Grid my={5}>
-                        {/* <Chart></Chart> */}
-                    </Grid>
-                </Grid>
-            </Grid >
-        );
+        //const data = [{ match: 1, kills: 20 }, { match: 2, kills: 7 }, { match: 3, kills: 12 }, { match: 4, kills: 15 }];
+        //const tableCollumns = ['kills', 'deaths', 'assists', 'goldEarned']
+        if (rows[0][0] != undefined) {
+            return (
+                <Grid sx={12} ref={inputEl}>
+                    <ResponsiveContainer width="100%" aspect={3}>
+                        <BarChart
+                            width={500}
+                            height={300}
+                            data={rows[0]}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="kills" fill="#8884d8" />
+                            <Bar dataKey="deaths" fill="#ba2727" />
+                            <Bar dataKey="assists" fill="#2f801f" />
+                            <Bar dataKey="goldEarned" fill="#ffc658" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </Grid >
+            );
+        }
+
     }
     else {
         const tableCollumns = ['name', 'Summoner Level', 'Profile Icon Id']
@@ -540,7 +523,7 @@ const resultTable = (rows, table) => {
     }
 }
 
-const resultTableFinal = (rowsMatches, rowSummoners) => {
+const resultTableFinal = (rowsMatches, rowSummoners, rowsMatchChart) => {
 
     const inputEl2 = useRef(null);
     return (
@@ -558,6 +541,11 @@ const resultTableFinal = (rowsMatches, rowSummoners) => {
                     <h2>Partidas Consultadas</h2>
                     <Divider />
                     {resultTable(rowsMatches, "Partidas por jogador")}
+                </Grid>
+                <Grid px={1} textAlign={'center'}>
+                    <h2>Grafico da Partida</h2>
+                    <Divider />
+                    {resultTable(rowsMatchChart, "Graficos por partida")}
                 </Grid>
             </Grid >
             <Grid py={2}>
