@@ -355,7 +355,7 @@ export default function Content() {
                                 />
                             </Grid>
                         </FormGroup>
-                        <Button variant="contained" onClick={handleSubmitMatchChart}>Buscar Partidas!</Button>
+                        <Button variant="contained" onClick={handleSubmitMatchChart}>Buscar dados da Partida!</Button>
 
                     </FormControl>
                 </Grid>

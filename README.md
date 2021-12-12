@@ -36,7 +36,7 @@ ou ao menos bater com o nome no database.js. Mas para fins de teste o nome não 
 ### Relatorio Ad-Hoc
 1. acesse a pastaa API com ``cd/relatorio``
 2. Rode o comando `npm install` na pasta
-3. Rode o comando `npm run dev`
+3. Rode o comando `npm start`
 --- 
 
 Final: Com a API e o Relatorio rodando a aplicação é funcional.
