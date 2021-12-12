@@ -8,26 +8,40 @@ const Match_summ_details = require('../models/match_summ_details');
 // Rota padrao
 router.get('/', async (req, res) => {
     const parsed = JSON.parse(req.query[0])
-    let summonerName = (parsed.SummonerName)
+    let summonerNumber = (parsed.SummonerNumber)
 
     //colocando os filtros recebidos do front em um array para o sequelize
     const keys = Object.keys(parsed);
     const atributesFilter = []
-    keys.forEach((key, index) => {
+    const atributesAllFilter = ['name', 'summonerLevel', 'profileIconid']
+
+    keys.forEach((key) => {
         if (parsed[key] == true) atributesFilter.push(key)
     });
 
     //se nenhum atributo foi para o filtro a consulta nao será feita
     if (atributesFilter.length == 0) {
-        res.sendStatus(400)
+        res.statusMessage = 'Nenhuma coluna selecionada';
+        res.status(400).end();
+    }
+    else if (summonerNumber == 0) {
+        res.statusMessage = 'Nenhuma quantidade selecionada';
+        res.status(400).end();
     }
     else {
-        //corrigindo o unico nome diferente no banco
-        if (summonerName == 'Kinky Freak') summonerName = 'Kinky  Freak'
         try {
-            const search = await Summoner.findOne({ where: { name: summonerName }, attributes: atributesFilter });
+            const search = await Summoner.findAll({ limit: summonerNumber });
             if (search != null) {
-                res.send(search.dataValues);
+                //deletando os atributos indesejados
+                search.forEach((data) => {
+                    console.log(data.dataValues)
+                    atributesAllFilter.forEach((att) => {
+                        if (data.dataValues[`${att}`] && !atributesFilter.includes(att)) {
+                            delete data.dataValues[`${att}`]
+                        }
+                    })
+                })
+                res.send(search);
             }
             else {
                 res.status(404).send('Not Found')

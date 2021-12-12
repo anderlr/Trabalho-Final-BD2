@@ -19,11 +19,15 @@ export default class Api {
         return this.client;
     };
 
-    getSummoner = (params) => {
+    getSummonerName = (params) => {
         return this.init().get("/summoner", { params: params });
     };
 
-    addNewUser = (data) => {
-        return this.init().post("/users", data);
+    getSummonerNumber = (params) => {
+        return this.init().get("/summonerNumber", { params: params });
     };
+
+    getMatches = (params) => {
+        return this.init().get("/matches", { params: params });
+    }
 }
