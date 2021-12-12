@@ -31,7 +31,6 @@ router.get('/', async (req, res) => {
             if (searchSumm != null) {
                 const search = await Match_summ_details.findAll({ where: { summ_puuid: searchSumm.dataValues.puuid }, attributes: atributesFilter });
                 if (search != null) {
-                    console.log(search)
                     res.send(search);
                 }
                 else {
