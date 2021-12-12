@@ -6,6 +6,8 @@ var insertData = require('./routes/insertData');
 var getSummoner = require('./routes/getSummoner');
 var getSummonerNumber = require('./routes/getSummonerNumber');
 var getMatches = require('./routes/getMatches');
+var getMatchCharts = require('./routes/getMatchChart');
+
 app.listen(5000, () => {
     console.log("Inicializado");
     console.log(`Servidor rodando localmente em: http://localhost:5000`);
@@ -15,6 +17,7 @@ app.use('/insertData', insertData);
 app.use('/summoner', getSummoner);
 app.use('/summonerNumber', getSummonerNumber);
 app.use('/matches', getMatches);
+app.use('/matchCharts', getMatchCharts)
 
 app.use(express.json());
 

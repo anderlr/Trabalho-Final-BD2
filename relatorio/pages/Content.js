@@ -57,17 +57,17 @@ export default function Content() {
 
 
 
+
+
+
     const [SummonerName, setName] = React.useState('');
+    const [MatchId, setMatchId] = React.useState('');
     const [SummonerNumber, setNumber] = React.useState('');
     const [rowSummoners, setResult] = React.useState([]);
     const [rowsMatches, setResultMatch] = React.useState([]);
 
     const handleChangeTable = (event) => {
         setTable(event.target.value);
-    };
-
-    const handleChangeTableSave = (value) => {
-        saveTable(state => [...state, value]);
     };
 
     const handleChangeSummoner = (event) => {
@@ -92,6 +92,10 @@ export default function Content() {
     };
 
 
+
+    const handleMatchId = (event) => {
+        setMatchId(event.target.value);
+    };
 
     const handleName = (event) => {
         setName(event.target.value);
@@ -164,23 +168,24 @@ export default function Content() {
 
     const handleSubmitMatchChart = async () => {
         const api = new Api();
-        CheckedMatchChart.matchid = matchid
+        CheckedMatchChart.matchid = MatchId
         try {
-            const resultado = await api.getSummonerNumber(JSON.stringify(checkedSummoner))
-            let insert = true
-            resultado.data.map((summ) => {
-                insert = true
-                rowSummoners.map((row) => {
-                    if (row.createdAt == summ.createdAt) {
-                        insert = false
-                    }
-                })
-                if (insert) {
-                    setResult(state => [...state,
-                        summ
-                    ])
-                }
-            });
+
+            const resultado = await api.getMatchChart(JSON.stringify(CheckedMatchChart))
+            // resultado.data.map((summ) => {
+            //     insert = true
+            //     rowSummoners.map((row) => {
+            //         if (row.createdAt == summ.createdAt) {
+            //             insert = false
+            //         }
+            //     })
+            //     if (insert) {
+            //         setResult(state => [...state,
+            //             summ
+            //         ])
+            //     }
+            // });
+            console.log(resultado)
 
         } catch (error) {
             if (error == 'Error: Request failed with status code 400') alert("Erro: Nenhuma coluna selecionada!")
@@ -331,7 +336,7 @@ export default function Content() {
         if (table == "Graficos por partida") {
             return (
                 <Grid sx={12}>
-                    <Grid my={2} sx={12}><TextField onChange={handleName} id="outlined-basic" label="Matchid da partida" variant="outlined" /></Grid>
+                    <Grid my={2} sx={12}><TextField onChange={handleMatchId} id="outlined-basic" label="Matchid da partida" variant="outlined" /></Grid>
                     <FormControl sx={12} component="fieldset" variant="standard">
                         <FormLabel component="legend">Colunas Selecionadas</FormLabel>
                         <FormGroup>
@@ -364,7 +369,7 @@ export default function Content() {
                                 />
                             </Grid>
                         </FormGroup>
-                        <Button variant="contained" onClick={handleSubmitMatches}>Buscar Partidas!</Button>
+                        <Button variant="contained" onClick={handleSubmitMatchChart}>Buscar Partidas!</Button>
 
                     </FormControl>
                 </Grid>

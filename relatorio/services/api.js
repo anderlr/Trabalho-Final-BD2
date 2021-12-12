@@ -30,4 +30,8 @@ export default class Api {
     getMatches = (params) => {
         return this.init().get("/matches", { params: params });
     }
+
+    getMatchChart = (params) => {
+        return this.init().get("/matchCharts", { params: params });
+    }
 }
